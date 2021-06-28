@@ -51,6 +51,7 @@ const Groups = () => {
   const [pagination, setPagination] = useState(meta);
   const [filterValue, setFilterValue] = useState(filters.name || '');
   const [selectedRows, setSelectedRows] = useState([]);
+  const [forceLoading, setForceLoading] = useState(false);
   const [removeGroupsList, setRemoveGroupsList] = useState([]);
 
   useEffect(() => {
@@ -205,11 +206,15 @@ const Groups = () => {
               const { name, count, limit, offset, orderBy } = config;
               applyPaginationToUrl(history, limit, offset);
               applyFiltersToUrl(history, { name });
-              return fetchData({ count, limit, offset, orderBy, filters: { name } });
+              fetchData({ count, limit, offset, orderBy, filters: { name } });
+              setForceLoading(false);
             }}
-            setFilterValue={({ name }) => setFilterValue(name)}
+            setFilterValue={({ name }) => {
+              setFilterValue(name);
+              setForceLoading(true);
+            }}
             toolbarButtons={toolbarButtons}
-            isLoading={isLoading}
+            isLoading={forceLoading || isLoading}
             filterPlaceholder="name"
             rowWrapper={GroupRowWrapper}
             tableId="groups"
