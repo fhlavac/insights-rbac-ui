@@ -10,7 +10,12 @@ import messages from './locales/data.json';
 const language = 'en';
 
 const InsightsRbac = () => (
-  <IntlProvider locale={language} messages={messages[language]}>
+  <IntlProvider
+    locale={language}
+    messages={{
+      ...(messages && Object.prototype.hasOwnProperty.call(messages, language) ? messages[language] : messages),
+    }}
+  >
     <RegistryContext.Provider
       value={{
         getRegistry: () => registry,
