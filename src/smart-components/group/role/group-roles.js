@@ -142,9 +142,10 @@ const GroupRoles = ({ onDefaultGroupChanged }) => {
     if (groupId !== 'default-access') {
       fetchGroupRoles(pagination)(groupId);
     } else {
+      console.log('&alled');
       systemGroupUuid && fetchGroupRoles(pagination)(systemGroupUuid);
     }
-  }, [systemGroupUuid]);
+  }, []);
 
   useEffect(() => {
     if (roles?.length > 0) {
@@ -154,7 +155,7 @@ const GroupRoles = ({ onDefaultGroupChanged }) => {
         systemGroupUuid && fetchAddGroupRoles(systemGroupUuid);
       }
     }
-  }, [roles]);
+  }, []);
 
   useEffect(() => {
     hasPermissions.current = orgAdmin || userAccessAdministrator;
@@ -328,11 +329,13 @@ const GroupRoles = ({ onDefaultGroupChanged }) => {
             [pathnames['group-add-roles'].path]: {
               afterSubmit: () => {
                 if (isPlatformDefault || isAdminDefault) {
+                  console.log('AAAAAA');
                   fetchSystGroup().then(({ value: { data } }) => {
                     fetchGroupRoles(pagination)(data[0].uuid);
                     fetchGroupData(data[0].uuid);
                   });
                 } else {
+                  console.log('ggg');
                   fetchGroupRoles(pagination)(groupId);
                   fetchGroupData();
                 }
