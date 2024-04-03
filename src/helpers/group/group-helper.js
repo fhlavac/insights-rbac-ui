@@ -158,6 +158,20 @@ export async function fetchAccountsForGroup(groupId, options = {}) {
   );
 }
 
+export async function checkAccountsInGroup(groupId, serviceAccountClientIds, options = {}) {
+  return await groupApi.getPrincipalsFromGroup(
+    groupId,
+    undefined,
+    options.clientID,
+    options.limit,
+    options.offset,
+    undefined,
+    undefined,
+    'service-account',
+    serviceAccountClientIds
+  );
+}
+
 export async function deleteRolesFromGroup(groupId, roles) {
   return await groupApi.deleteRoleFromGroup(groupId, roles.join(','));
 }

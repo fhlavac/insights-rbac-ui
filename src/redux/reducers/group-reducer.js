@@ -12,6 +12,7 @@ import {
   INVALIDATE_SYSTEM_GROUP,
   FETCH_ROLES_FOR_EXPANDED_GROUP,
   FETCH_MEMBERS_FOR_EXPANDED_GROUP,
+  FETCH_SERVICE_ACCOUNTS_IN_GROUP,
 } from '../../redux/action-types';
 import omit from 'lodash/omit';
 import { defaultSettings } from '../../helpers/shared/pagination';
@@ -139,6 +140,26 @@ const setAccountsForGroup = (state, { payload }) => ({
   },
 });
 
+const setAccountsInGroupLoading = (state = {}) => ({
+  ...state,
+  selectedGroup: {
+    ...(state.selectedGroup || {}),
+    serviceAccounts: { isLoading: true },
+  },
+});
+const setAccountsInGroup = (state, { payload }) => ({
+  ...state,
+  selectedGroup: {
+    ...(state.selectedGroup || {}),
+    serviceAccounts: {
+      isLoading: false,
+      ...(!payload.error
+        ? { ...payload, data: payload.data.map((item) => ({ ...item, uuid: item.name, time_created: item.time_created * 1000 })) }
+        : {}),
+    },
+  },
+});
+
 const setMembersForGroupLoading = (state = {}) => ({
   ...state,
   selectedGroup: {
@@ -211,6 +232,8 @@ export default {
   [`${FETCH_ROLES_FOR_EXPANDED_GROUP}_FULFILLED`]: setRolesForExpandedGroup,
   [`${FETCH_SERVICE_ACCOUNTS_FOR_GROUP}_PENDING`]: setAccountsForGroupLoading,
   [`${FETCH_SERVICE_ACCOUNTS_FOR_GROUP}_FULFILLED`]: setAccountsForGroup,
+  [`${FETCH_SERVICE_ACCOUNTS_IN_GROUP}_PENDING`]: setAccountsInGroupLoading,
+  [`${FETCH_SERVICE_ACCOUNTS_IN_GROUP}_FULFILLED`]: setAccountsInGroup,
   [`${FETCH_MEMBERS_FOR_GROUP}_PENDING`]: setMembersForGroupLoading,
   [`${FETCH_MEMBERS_FOR_GROUP}_FULFILLED`]: setMembersForGroup,
   [`${FETCH_MEMBERS_FOR_EXPANDED_GROUP}_PENDING`]: setMembersForExpandedGroupLoading,

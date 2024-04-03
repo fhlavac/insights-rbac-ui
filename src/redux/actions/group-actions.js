@@ -202,6 +202,11 @@ export const fetchServiceAccountsForGroup = (groupId, options) => ({
   payload: GroupHelper.fetchAccountsForGroup(groupId, options).catch(handleUuidError),
 });
 
+export const checkServiceAccountsInGroup = (groupId, serviceAccountClientIds, options) => ({
+  type: ActionTypes.FETCH_SERVICE_ACCOUNTS_IN_GROUP,
+  payload: GroupHelper.fetchAccountsInGroup(groupId, serviceAccountClientIds, options).catch(handleUuidError),
+});
+
 export const addServiceAccountsToGroup = (groupId, serviceAccounts) => {
   const cache = createIntlCache();
   const intl = createIntl({ locale, messages: providerMessages }, cache);
